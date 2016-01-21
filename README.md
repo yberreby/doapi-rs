@@ -77,7 +77,7 @@ Add `doapi` as a dependecy in your `Cargo.toml` file to use from crates.io:
 git = "https://github.com/kbknapp/doapi-rs.git"
 ```
 
-Add `extern crate dopai;` to your crate root.
+Add `extern crate doapi;` to your crate root.
 
 ### DigitalOcean Personal Auth Token
 
