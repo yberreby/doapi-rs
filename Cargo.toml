@@ -1,25 +1,28 @@
 [package]
-name = "doapi"
-version = "0.1.1"
 authors = ["Kevin K. <kbknapp@gmail.com>"]
 description = "A wrapper library for the DigitalOcean API v2"
-license = "MIT"
-repository = "https://github.com/kbknapp/doapi-rs.git"
 documentation = "http://kbknapp.github.io/doapi-rs"
-readme = "README.md"
 keywords = ["do", "lib", "digitalocean", "digital", "ocean"]
+license = "MIT"
+name = "doapi"
+readme = "README.md"
+repository = "https://github.com/kbknapp/doapi-rs.git"
+version = "0.1.1"
 
 [dependencies]
 hyper = "0.6"
 regex = "0.1"
-serde_macros = "0.6"
-serde = "0.6"
+serde = "0.6.14"
 serde_json = "0.6"
-clippy = {version = "0.0.22", optional=true}
+serde_macros = "0.6.14"
+
+[dependencies.clippy]
+optional = true
+version = "0.0.22"
 
 [features]
+debug = []
 default = ["nightly"]
 lints = ["nightly", "clippy"]
 nightly = []
-debug = []
 unstable = ["nightly", "lints"]
