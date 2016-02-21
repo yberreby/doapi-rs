@@ -1,9 +1,12 @@
 extern crate doapi;
+use std::thread;
+use std::time::Duration;
 
 fn main() {
     let token = env!("DO_AUTH_TOKEN");
     let mut client = doapi::Client::with_token(token);
 
+    // Create a droplet.
     let droplet_params = doapi::request::Droplet {
         name: "doapi-test".into(),
         region: "ams2".into(),
@@ -18,7 +21,16 @@ fn main() {
 
     println!("Request:\n{:?}", droplet_params);
 
-    let resp = client.droplets().create(&droplet_params).unwrap();
+    let mut new_droplet = client.droplets().create(&droplet_params).unwrap();
 
-    println!("Response:\n{:?}", resp);
+    // Wait for it to be up.
+    while new_droplet.status == "new" {
+        println!("New droplet:\n{:?}", new_droplet);
+        println!("droplet not ready yet, sleeping...");
+        thread::sleep(Duration::from_secs(5));
+        new_droplet = client.droplets().get(new_droplet.id).unwrap();
+    }
+
+    // It is up!
+    println!("Droplet spinned up successfully.");
 }

@@ -22,4 +22,11 @@ impl<'tok> DropletsService<'tok> {
 
         self.client.send_request(req)
     }
+
+    /// Retrieve an individual droplet by ID.
+    ///
+    /// Useful if you want to check its status.
+    pub fn get(&mut self, id: i64) -> DoResult<response::Droplet> {
+        unimplemented!()
+    }
 }

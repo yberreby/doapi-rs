@@ -49,7 +49,9 @@ impl Client {
                             .request(method, url)
                             .header(auth_header)
                             .send());
-
+        // XXX: will not work as-is, see:
+        // https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet
+        // See the old doapi's retrieve_obj method.
         serde_json::from_reader(resp).map_err(Into::into)
     }
 }
