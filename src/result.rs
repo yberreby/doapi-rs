@@ -9,6 +9,9 @@ quick_error! {
         Json(e: ::serde_json::Error) {
             from()
         }
+        Http(e: ::hyper::Error) {
+            from()
+        }
     }
 }
 

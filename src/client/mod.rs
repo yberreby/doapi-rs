@@ -1,4 +1,6 @@
 use common::*;
+use hyper;
+use serde;
 
 mod droplets;
 pub use self::droplets::DropletsService;
@@ -6,21 +8,42 @@ pub use self::droplets::DropletsService;
 /// A DigitalOcean client.
 pub struct Client {
     token: String,
+    http_client: ::hyper::Client,
 }
 
 impl Client {
     /// Create a new Client with the given API token.
     pub fn with_token<T: Into<String>>(tok: T) -> Client {
-        Client { token: tok.into() }
+        let http_client = hyper::Client::new();
+        Client {
+            token: tok.into(),
+            http_client: http_client,
+        }
     }
 
     pub fn droplets(&mut self) -> DropletsService {
         DropletsService::new(self)
     }
 
-    fn send<T>(&mut self, req: &RequestBuilder) -> DoResult<T>
+    fn send<T>(&mut self, req_params: RequestParams) -> DoResult<T>
         where T: ::serde::Deserialize
     {
+        use hyper::header::{Authorization, Bearer};
+
+
+        let RequestParams {
+            url,
+            method,
+            body
+        } = req_params;
+
+        let auth_header = Authorization(Bearer { token: self.token.to_owned() });
+
+        let resp = try!(self.http_client
+                            .request(method, &url)
+                            .header(auth_header)
+                            .send());
+
         unimplemented!()
     }
 }

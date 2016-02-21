@@ -14,12 +14,12 @@ impl<'tok> DropletsService<'tok> {
     pub fn create(&mut self, droplet_req: &request::Droplet) -> DoResult<response::Droplet> {
         let body = try!(::serde_json::to_string(&droplet_req));
 
-        let req = RequestBuilder {
+        let req = RequestParams {
             method: Method::Post,
             url: DROPLETS_BASE_PATH.into(),
             body: Some(body),
         };
 
-        self.client.send(&req)
+        self.client.send(req)
     }
 }

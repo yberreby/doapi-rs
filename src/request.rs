@@ -1,6 +1,6 @@
 use common::*;
 
-pub struct RequestBuilder {
+pub struct RequestParams {
     pub method: Method,
     pub url: String,
     pub body: Option<String>,
