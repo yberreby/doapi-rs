@@ -1,4 +1,5 @@
 use common::*;
+use serde;
 
 pub struct RequestParams {
     pub method: Method,
@@ -6,18 +7,37 @@ pub struct RequestParams {
     pub body: Option<String>,
 }
 
+
+
 /// A Droplet request.
 #[derive(Debug, Serialize)]
 pub struct Droplet {
     pub name: String,
     pub region: String,
     pub size: String,
-    // For now, we only support public image slugs, so this is a String.
-    // But DO also supports numeric IDs, for private images (snapshots?).
-    pub image: String,
+    // DO also supports numeric IDs, for private images (snapshots?), as well
+    // as slugs for public images.
+    pub image: Image,
     pub ssh_keys: Option<Vec<String>>,
     pub backups: bool,
     pub ipv6: bool,
     pub private_networking: bool,
     pub user_data: Option<String>,
+}
+
+#[derive(Debug)]
+pub enum Image {
+    Id(i64),
+    Slug(String),
+}
+
+impl serde::Serialize for Image {
+    fn serialize<S>(&self, serializer: &mut S) -> Result<(), S::Error>
+        where S: serde::Serializer
+    {
+        match *self {
+            Image::Id(id) => serializer.visit_i64(id),
+            Image::Slug(ref s) => serializer.visit_str(&s),
+        }
+    }
 }
