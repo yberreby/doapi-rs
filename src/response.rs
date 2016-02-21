@@ -1,10 +1,10 @@
 #[derive(Deserialize, Debug)]
 pub struct Droplet {
-    pub id: f64,
+    pub id: i64,
     pub name: String,
-    pub memory: f64,
-    pub vcpus: f64,
-    pub disk: f64,
+    pub memory: i64,
+    pub vcpus: i64,
+    pub disk: i64,
     pub locked: bool,
     pub status: String,
     pub kernel: Option<Kernel>,
@@ -22,7 +22,7 @@ pub struct Droplet {
 
 #[derive(Deserialize, Debug)]
 pub struct Kernel {
-    pub id: f64,
+    pub id: i64,
     pub name: String,
     pub version: String,
 }
@@ -30,7 +30,7 @@ pub struct Kernel {
 
 #[derive(Deserialize, Debug)]
 pub struct Backup {
-    pub id: f64,
+    pub id: i64,
     pub name: String,
     #[serde(rename = "type")]
     pub b_type: String,
@@ -38,7 +38,7 @@ pub struct Backup {
     pub slug: Option<String>,
     pub public: bool,
     pub regions: Vec<String>,
-    pub min_disk_size: f64,
+    pub min_disk_size: i64,
 }
 
 
@@ -60,14 +60,14 @@ pub struct Networks {
 
 #[derive(Deserialize, Debug)]
 pub struct Image {
-    id: f64,
+    id: i64,
     name: String,
     distribution: String,
     slug: Option<String>,
     public: bool,
     regions: Vec<String>,
     created_at: String,
-    min_disk_size: f64,
+    min_disk_size: i64,
     #[serde(rename = "type")]
     image_type: String,
 }
@@ -75,12 +75,12 @@ pub struct Image {
 #[derive(Deserialize, Debug)]
 pub struct Size {
     slug: String,
-    memory: f64,
-    vcpus: f64,
-    disk: f64,
-    transfer: f64,
-    price_monthly: f64,
-    price_hourly: f64,
+    memory: i64,
+    vcpus: i64,
+    disk: i64,
+    transfer: i64,
+    price_monthly: i64,
+    price_hourly: i64,
     regions: Vec<String>,
     available: bool,
 }
