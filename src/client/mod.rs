@@ -30,6 +30,7 @@ impl Client {
         DropletsService::new(self)
     }
 
+    /// Send a request to DigitalOcean with the given parameters.
     fn send_request<T>(&mut self, req_params: RequestParams) -> DoResult<T>
         where T: ::serde::Deserialize
     {

@@ -17,7 +17,7 @@ impl<'tok> DropletsService<'tok> {
         let req = RequestParams {
             method: Method::Post,
             relative_url: DROPLETS_BASE_PATH.into(),
-            body: Some(body),
+            body: Some(body), // that I used to know
         };
 
         self.client.send_request(req)
@@ -27,6 +27,13 @@ impl<'tok> DropletsService<'tok> {
     ///
     /// Useful if you want to check its status.
     pub fn get(&mut self, id: i64) -> DoResult<response::Droplet> {
-        unimplemented!()
+        let req = RequestParams {
+            method: Method::Get,
+            // XXX - string interpolation is not ideal, is it?
+            relative_url: format!("{}/{}", DROPLETS_BASE_PATH, id),
+            body: None,
+        };
+
+        self.client.send_request(req)
     }
 }
