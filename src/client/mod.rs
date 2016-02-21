@@ -1,6 +1,9 @@
 use request;
 use response;
 
+mod droplets;
+pub use self::droplets::DropletsService;
+
 /// A DigitalOcean client.
 pub struct Client {
     token: String,
@@ -14,22 +17,5 @@ impl Client {
 
     pub fn droplets(&self) -> DropletsService {
         DropletsService::with_token(&self.token)
-    }
-}
-
-
-
-pub struct DropletsService<'tok> {
-    token: &'tok str,
-}
-
-impl<'tok> DropletsService<'tok> {
-    pub fn with_token(token: &str) -> DropletsService {
-        DropletsService { token: token }
-    }
-
-    pub fn create(droplet_req: &request::Droplet) -> response::Droplet {
-
-        unimplemented!()
     }
 }
