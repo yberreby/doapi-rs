@@ -53,6 +53,8 @@ impl Client {
             None => Vec::new(),
         };
 
+        debug!("Sending body:\n{}", String::from_utf8_lossy(&body));
+
         let req_builder = self.http_client
                               .request(method, url)
                               .body(&body[..])
