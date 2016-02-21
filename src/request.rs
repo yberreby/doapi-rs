@@ -1,4 +1,13 @@
+use common::*;
+
+pub struct RequestBuilder {
+    pub method: Method,
+    pub url: String,
+    pub body: Option<String>,
+}
+
 /// A Droplet request.
+#[derive(Debug, Serialize)]
 pub struct Droplet {
     pub name: String,
     pub region: String,

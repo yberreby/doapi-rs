@@ -1,5 +1,4 @@
-use request;
-use response;
+use common::*;
 
 mod droplets;
 pub use self::droplets::DropletsService;
@@ -15,7 +14,13 @@ impl Client {
         Client { token: tok.into() }
     }
 
-    pub fn droplets(&self) -> DropletsService {
-        DropletsService::with_token(&self.token)
+    pub fn droplets(&mut self) -> DropletsService {
+        DropletsService::new(self)
+    }
+
+    fn send<T>(&mut self, req: &RequestBuilder) -> DoResult<T>
+        where T: ::serde::Deserialize
+    {
+        unimplemented!()
     }
 }

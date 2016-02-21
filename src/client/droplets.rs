@@ -1,19 +1,25 @@
-use request;
-use response;
+use common::*;
 
 const DROPLETS_BASE_PATH: &'static str = "v2/droplets";
 
-pub struct DropletsService<'tok> {
-    token: &'tok str,
+pub struct DropletsService<'client> {
+    client: &'client mut Client,
 }
 
 impl<'tok> DropletsService<'tok> {
-    pub fn with_token(token: &str) -> DropletsService {
-        DropletsService { token: token }
+    pub fn new(client: &mut Client) -> DropletsService {
+        DropletsService { client: client }
     }
 
-    pub fn create(droplet_req: &request::Droplet) -> response::Droplet {
+    pub fn create(&mut self, droplet_req: &request::Droplet) -> DoResult<response::Droplet> {
+        let body = try!(::serde_json::to_string(&droplet_req));
 
-        unimplemented!()
+        let req = RequestBuilder {
+            method: Method::Post,
+            url: DROPLETS_BASE_PATH.into(),
+            body: Some(body),
+        };
+
+        self.client.send(&req)
     }
 }
