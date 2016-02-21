@@ -1,6 +1,8 @@
 use request;
 use response;
 
+const DROPLETS_BASE_PATH: &'static str = "v2/droplets";
+
 pub struct DropletsService<'tok> {
     token: &'tok str,
 }
