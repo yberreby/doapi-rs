@@ -33,7 +33,7 @@ impl<'tok> DropletsService<'tok> {
         DropletsService { token: token }
     }
 
-    pub fn create(params: &request::Droplet) -> response::Droplet {
+    pub fn create(droplet_req: &request::Droplet) -> response::Droplet {
         unimplemented!()
     }
 }
