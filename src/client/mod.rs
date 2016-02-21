@@ -30,7 +30,7 @@ impl Client {
         DropletsService::new(self)
     }
 
-    fn send<T>(&mut self, req_params: RequestParams) -> DoResult<T>
+    fn send_request<T>(&mut self, req_params: RequestParams) -> DoResult<T>
         where T: ::serde::Deserialize
     {
         use hyper::header::{Authorization, Bearer};

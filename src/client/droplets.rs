@@ -20,6 +20,6 @@ impl<'tok> DropletsService<'tok> {
             body: Some(body),
         };
 
-        self.client.send(req)
+        self.client.send_request(req)
     }
 }
