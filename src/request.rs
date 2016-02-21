@@ -7,8 +7,6 @@ pub struct RequestParams {
     pub body: Option<String>,
 }
 
-
-
 /// A Droplet request.
 #[derive(Debug, Serialize)]
 pub struct Droplet {
@@ -27,8 +25,10 @@ pub struct Droplet {
 
 #[derive(Debug)]
 pub enum Image {
-    Id(i64),
-    Slug(String),
+    /// A public image slug.
+    Public(String),
+    /// A private image ID.
+    Private(i64),
 }
 
 impl serde::Serialize for Image {
@@ -36,8 +36,8 @@ impl serde::Serialize for Image {
         where S: serde::Serializer
     {
         match *self {
-            Image::Id(id) => serializer.visit_i64(id),
-            Image::Slug(ref s) => serializer.visit_str(&s),
+            Image::Public(ref s) => serializer.visit_str(&s),
+            Image::Private(id) => serializer.visit_i64(id),
         }
     }
 }
