@@ -44,6 +44,6 @@ impl Client {
                             .header(auth_header)
                             .send());
 
-        Ok(try!(serde_json::from_reader(resp)))
+        serde_json::from_reader(resp).map_err(Into::into)
     }
 }
