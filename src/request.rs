@@ -2,7 +2,7 @@ use common::*;
 
 pub struct RequestParams {
     pub method: Method,
-    pub url: String,
+    pub relative_url: String,
     pub body: Option<String>,
 }
 

@@ -1,5 +1,9 @@
 #![feature(custom_derive, plugin)]
+#![feature(const_fn)]
 #![plugin(serde_macros)]
+
+#[macro_use]
+extern crate lazy_static;
 
 #[macro_use]
 extern crate quick_error;

@@ -16,7 +16,7 @@ impl<'tok> DropletsService<'tok> {
 
         let req = RequestParams {
             method: Method::Post,
-            url: DROPLETS_BASE_PATH.into(),
+            relative_url: DROPLETS_BASE_PATH.into(),
             body: Some(body),
         };
 

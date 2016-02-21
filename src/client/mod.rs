@@ -6,6 +6,10 @@ use serde_json;
 mod droplets;
 pub use self::droplets::DropletsService;
 
+lazy_static! {
+    static ref API_ROOT: Url = Url::parse("https://api.digitalocean.com").unwrap();
+}
+
 /// A DigitalOcean client.
 pub struct Client {
     token: String,
@@ -32,15 +36,17 @@ impl Client {
         use hyper::header::{Authorization, Bearer};
 
         let RequestParams {
-            url,
+            relative_url,
             method,
             body
         } = req_params;
 
+        let url = API_ROOT.join(&relative_url).unwrap();
+
         let auth_header = Authorization(Bearer { token: self.token.to_owned() });
 
         let resp = try!(self.http_client
-                            .request(method, &url)
+                            .request(method, url)
                             .header(auth_header)
                             .send());
 
