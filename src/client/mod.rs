@@ -1,6 +1,7 @@
 use common::*;
 use hyper;
 use serde;
+use serde_json;
 
 mod droplets;
 pub use self::droplets::DropletsService;
@@ -30,7 +31,6 @@ impl Client {
     {
         use hyper::header::{Authorization, Bearer};
 
-
         let RequestParams {
             url,
             method,
@@ -44,6 +44,6 @@ impl Client {
                             .header(auth_header)
                             .send());
 
-        unimplemented!()
+        Ok(try!(serde_json::from_reader(resp)))
     }
 }
