@@ -20,7 +20,7 @@ impl<'tok> DropletsService<'tok> {
             body: Some(body), // that I used to know
         };
 
-        self.client.send_request(req)
+        self.client.send_request(req, "droplet")
     }
 
     /// Retrieve an individual droplet by ID.
@@ -34,6 +34,6 @@ impl<'tok> DropletsService<'tok> {
             body: None,
         };
 
-        self.client.send_request(req)
+        self.client.send_request(req, "droplet")
     }
 }

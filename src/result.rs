@@ -2,7 +2,10 @@ use std::io;
 
 quick_error! {
     #[derive(Debug)]
-    pub enum Error {
+    pub enum DoError {
+        Api(e: ApiError) {
+            from()
+        }
         Io(e: io::Error) {
             from()
         }
@@ -15,4 +18,10 @@ quick_error! {
     }
 }
 
-pub type DoResult<T> = ::std::result::Result<T, Error>;
+pub type DoResult<T> = ::std::result::Result<T, DoError>;
+
+#[derive(Deserialize, Debug)]
+pub struct ApiError {
+    id: String,
+    message: String,
+}

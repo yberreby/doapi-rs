@@ -30,8 +30,9 @@ impl Client {
         DropletsService::new(self)
     }
 
-    /// Send a request to DigitalOcean with the given parameters.
-    fn send_request<T>(&mut self, req_params: RequestParams) -> DoResult<T>
+    /// Send a request to DigitalOcean with the given parameters,
+    /// and the given key (property name for the response).
+    fn send_request<T>(&mut self, req_params: RequestParams, key: &str) -> DoResult<T>
         where T: ::serde::Deserialize
     {
         use hyper::header::{Authorization, Bearer};
@@ -46,13 +47,39 @@ impl Client {
 
         let auth_header = Authorization(Bearer { token: self.token.to_owned() });
 
-        let resp = try!(self.http_client
-                            .request(method, url)
-                            .header(auth_header)
-                            .send());
-        // XXX: will not work as-is, see:
-        // https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet
-        // See the old doapi's retrieve_obj method.
-        serde_json::from_reader(resp).map_err(Into::into)
+        // XXX: this may be inefficient.
+        let body: Vec<u8> = match body {
+            Some(b) => b.into(),
+            None => Vec::new(),
+        };
+
+        let req_builder = self.http_client
+                              .request(method, url)
+                              .body(&body[..])
+                              .header(auth_header);
+
+        let resp = try!(req_builder.send());
+
+        let json_value = try!(serde_json::from_reader(resp));
+
+        from_obj(json_value, key)
+    }
+}
+
+// XXX: these .clone() calls are inefficient, but required to appease the
+// borrowck's wrath.
+
+/// Get a result from a JSON object and a property name.
+fn from_obj<T>(value: serde_json::Value, key: &str) -> DoResult<T>
+    where T: serde::Deserialize
+{
+    match value.find(key) {
+        Some(v) => serde_json::from_value(v.clone()).map_err(Into::into),
+        None => {
+            match serde_json::from_value::<ApiError>(value.clone()) {
+                Ok(api_error) => Err(DoError::Api(api_error)),
+                Err(e) => Err(DoError::Json(e)),
+            }
+        }
     }
 }
