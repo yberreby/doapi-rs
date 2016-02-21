@@ -1,3 +1,6 @@
+pub mod request;
+pub mod response;
+
 /// A DigitalOcean client.
 pub struct Client {
     token: String,
@@ -25,10 +28,7 @@ impl<'tok> DropletsService<'tok> {
         DropletsService { token: token }
     }
 
-    pub fn create(params: &DropletCreateParams) -> Droplet {
+    pub fn create(params: &request::Droplet) -> response::Droplet {
         unimplemented!()
     }
 }
-
-pub struct Droplet;
-pub struct DropletCreateParams;
