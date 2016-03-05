@@ -1,13 +1,15 @@
 use common::*;
 use serde;
 
+/// This is what we use to construct the HTTP request sent to DO.
+/// A request template, if you wish.
 pub struct DoRequest {
     pub method: Method,
     pub relative_url: String,
     pub body: Option<String>,
 }
 
-/// A Droplet as used in a request.
+/// A droplet, as used in a request.
 #[derive(Debug, Serialize)]
 pub struct Droplet {
     pub name: String,
@@ -25,10 +27,10 @@ pub struct Droplet {
 
 #[derive(Debug)]
 pub enum Image {
-    /// A public image slug.
-    Public(String),
-    /// A private image ID.
-    Private(i64),
+    /// An image slug.
+    Slug(String),
+    /// An image ID (can be private or public).
+    Id(i64),
 }
 
 impl serde::Serialize for Image {
@@ -36,8 +38,8 @@ impl serde::Serialize for Image {
         where S: serde::Serializer
     {
         match *self {
-            Image::Public(ref s) => serializer.serialize_str(&s),
-            Image::Private(id) => serializer.serialize_i64(id),
+            Image::Slug(ref s) => serializer.serialize_str(&s),
+            Image::Id(id) => serializer.serialize_i64(id),
         }
     }
 }
