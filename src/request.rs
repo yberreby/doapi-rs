@@ -36,8 +36,8 @@ impl serde::Serialize for Image {
         where S: serde::Serializer
     {
         match *self {
-            Image::Public(ref s) => serializer.visit_str(&s),
-            Image::Private(id) => serializer.visit_i64(id),
+            Image::Public(ref s) => serializer.serialize_str(&s),
+            Image::Private(id) => serializer.serialize_i64(id),
         }
     }
 }
