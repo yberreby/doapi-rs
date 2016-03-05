@@ -32,12 +32,12 @@ impl Client {
 
     /// Send a request to DigitalOcean with the given parameters,
     /// and the given key (property name for the response).
-    fn send_request<T>(&mut self, req_params: RequestParams, key: &str) -> DoResult<T>
+    fn send_request<T>(&mut self, req_params: DoRequest, key: &str) -> DoResult<T>
         where T: ::serde::Deserialize
     {
-        use hyper::header::{Authorization, Bearer};
+        use hyper::header::{Authorization, Bearer, ContentType};
 
-        let RequestParams {
+        let DoRequest {
             relative_url,
             method,
             body
@@ -58,7 +58,8 @@ impl Client {
         let req_builder = self.http_client
                               .request(method, url)
                               .body(&body[..])
-                              .header(auth_header);
+                              .header(auth_header)
+                              .header(ContentType::json());
 
         let resp = try!(req_builder.send());
 

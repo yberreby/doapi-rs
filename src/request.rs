@@ -1,13 +1,13 @@
 use common::*;
 use serde;
 
-pub struct RequestParams {
+pub struct DoRequest {
     pub method: Method,
     pub relative_url: String,
     pub body: Option<String>,
 }
 
-/// A Droplet request.
+/// A Droplet as used in a request.
 #[derive(Debug, Serialize)]
 pub struct Droplet {
     pub name: String,

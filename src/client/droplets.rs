@@ -14,7 +14,7 @@ impl<'tok> DropletsService<'tok> {
     pub fn create(&mut self, droplet_req: &request::Droplet) -> DoResult<response::Droplet> {
         let body = try!(::serde_json::to_string(&droplet_req));
 
-        let req = RequestParams {
+        let req = DoRequest {
             method: Method::Post,
             relative_url: DROPLETS_BASE_PATH.into(),
             body: Some(body), // that I used to know
@@ -27,7 +27,7 @@ impl<'tok> DropletsService<'tok> {
     ///
     /// Useful if you want to check its status.
     pub fn get(&mut self, id: i64) -> DoResult<response::Droplet> {
-        let req = RequestParams {
+        let req = DoRequest {
             method: Method::Get,
             // XXX - string interpolation is not ideal, is it?
             relative_url: format!("{}/{}", DROPLETS_BASE_PATH, id),
