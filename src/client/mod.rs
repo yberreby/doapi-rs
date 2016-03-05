@@ -35,7 +35,7 @@ impl Client {
     fn send_request<T>(&mut self, req_params: DoRequest, key: &str) -> DoResult<T>
         where T: ::serde::Deserialize
     {
-        use hyper::header::{Authorization, Bearer, ContentType};
+        use hyper::header::{Authorization, Bearer, ContentType, Headers};
 
         let DoRequest {
             relative_url,
@@ -45,7 +45,10 @@ impl Client {
 
         let url = API_ROOT.join(&relative_url).unwrap();
 
-        let auth_header = Authorization(Bearer { token: self.token.to_owned() });
+        let mut headers = Headers::new();
+        // The JSON Content-Type is *required*.
+        headers.set(ContentType::json());
+        headers.set(Authorization(Bearer { token: self.token.to_owned() }));
 
         // XXX: this may be inefficient.
         let body: Vec<u8> = match body {
@@ -58,8 +61,7 @@ impl Client {
         let req_builder = self.http_client
                               .request(method, url)
                               .body(&body[..])
-                              .header(auth_header)
-                              .header(ContentType::json());
+                              .headers(headers);
 
         let resp = try!(req_builder.send());
 
